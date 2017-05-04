@@ -27,7 +27,7 @@ static ssize_t (*__real_recvmsg)(int sockfd, struct msghdr *msg, int flags);
 
 __attribute__((constructor)) void wgotw_socket_init()
 {
-	printf("[+] WGOtW: wrapping socket functions\n");
+	DEBUG("%s", "WGOtW: wrapping socket functions...");
 
 	__real_send = dlsym(RTLD_NEXT, "send");
 	__real_sendto = dlsym(RTLD_NEXT, "sendto");

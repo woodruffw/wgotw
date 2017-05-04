@@ -15,13 +15,14 @@ __attribute__((constructor (101))) void wgotw_init()
 {
 	wgotw_session_init();
 
-	printf("[+] wgotw_init(): %s\n", session->dir);
+	DEBUG("%s", "wgotw_init()");
 }
 
 __attribute__((destructor (101))) void wgotw_deinit()
 {
 	wgotw_session_free();
-	printf("[+] wgotw_deinit()\n");
+
+	DEBUG("%s", "wgotw_deinit()");
 }
 
 static struct wgotw_connection *connection_init(struct sockfacts *facts)
@@ -93,7 +94,7 @@ void wgotw_session_init()
 	snprintf(session->dir, len, WGOTW_SESSION_FMT, session->pid);
 
 	session->opts.verbose = getenv("WGOTW_VERBOSE") ? 1 : 0;
-	session->opts.verbose = getenv("WGOTW_DEBUG") ? 1 : 0;
+	session->opts.debug = getenv("WGOTW_DEBUG") ? 1 : 0;
 
 	SLIST_INIT(&(session->addr_head));
 
