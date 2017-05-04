@@ -42,11 +42,15 @@ static struct wgotw_connection *connection_init(struct sockfacts *facts)
 	char *addr_dir = malloc(len);
 	snprintf(addr_dir, len, WGOTW_SESSION_FMT "/%s", session->pid,
 		con->address);
+
+	/* place the addr dir on disk */
 	mkdir(addr_dir, 0777);
 
 	len = snprintf(NULL, 0, "%s/%d", addr_dir, con->port) + 1;
 	con->dir = malloc(len);
 	snprintf(con->dir, len, "%s/%d", addr_dir, con->port);
+
+	/* place the port dir on disk */
 	mkdir(con->dir, 0777);
 
 	free(addr_dir);
@@ -89,9 +93,12 @@ void wgotw_session_init()
 	session->dir = malloc(len);
 	snprintf(session->dir, len, WGOTW_SESSION_FMT, session->pid);
 
-	mkdir(session->dir, 0777);
+	session->opts.verbose = getenv("WGOTW_VERBOSE") ? 1 : 0;
 
 	SLIST_INIT(&(session->addr_head));
+
+	/* actually place the session on disk */
+	mkdir(session->dir, 0777);
 }
 
 void wgotw_session_free()

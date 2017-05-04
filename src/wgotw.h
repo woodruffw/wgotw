@@ -4,9 +4,9 @@
 #include <sys/queue.h>
 
 #define WGOTW_SESSION_FMT "wgotw-%d"
-#define WGOTW_CON_TREE_FMT WGOTW_SESSION_FMT "/%s/%d"
-#define WGOTW_CON_INBOUND_FMT WGOTW_CON_TREE_FMT "/inbound"
-#define WGOTW_CON_OUTBOUND_FMT WGOTW_CON_TREE_FMT "/outbound"
+// #define WGOTW_CON_TREE_FMT WGOTW_SESSION_FMT "/%s/%d"
+// #define WGOTW_CON_INBOUND_FMT WGOTW_CON_TREE_FMT "/inbound"
+// #define WGOTW_CON_OUTBOUND_FMT WGOTW_CON_TREE_FMT "/outbound"
 
 enum WGOTW_BUFFER_TYPE {
 	BUFFER_INBOUND,
@@ -14,9 +14,14 @@ enum WGOTW_BUFFER_TYPE {
 	BUFFER_UNKNOWN,
 };
 
+struct wgotw_options {
+	int verbose;
+};
+
 struct wgotw_session {
 	int pid;
 	char *dir;
+	struct wgotw_options opts;
 	SLIST_HEAD(, wgotw_connection) addr_head;
 };
 
