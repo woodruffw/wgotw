@@ -40,7 +40,7 @@ __attribute__((constructor)) void wgotw_socket_init()
 
 ssize_t send(int sockfd, const void *buf, size_t len, int flags)
 {
-	wgotw_record_outgoing(sockfd, buf, len);
+	wgotw_record(BUFFER_OUTBOUND, sockfd, buf, len);
 
 	return __real_send(sockfd, buf, len, flags);
 }
@@ -48,7 +48,7 @@ ssize_t send(int sockfd, const void *buf, size_t len, int flags)
 ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
 	const struct sockaddr *dest_addr, socklen_t addrlen)
 {
-	wgotw_record_outgoing(sockfd, buf, len);
+	wgotw_record(BUFFER_OUTBOUND, sockfd, buf, len);
 
 	return __real_sendto(sockfd, buf, len, flags, dest_addr, addrlen);
 }
@@ -64,7 +64,7 @@ ssize_t recv(int sockfd, void *buf, size_t len, int flags)
 {
 	size_t nrecv = __real_recv(sockfd, buf, len, flags);
 
-	wgotw_record_incoming(sockfd, buf, nrecv);
+	wgotw_record(BUFFER_INBOUND, sockfd, buf, nrecv);
 
 	return nrecv;
 }
@@ -74,7 +74,7 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
 {
 	size_t nrecv = __real_recvfrom(sockfd, buf, len, flags, src_addr, addrlen);
 
-	wgotw_record_incoming(sockfd, buf, nrecv);
+	wgotw_record(BUFFER_INBOUND, sockfd, buf, nrecv);
 
 	return nrecv;
 }

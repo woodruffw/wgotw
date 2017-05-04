@@ -7,21 +7,20 @@
 #include <sys/stat.h>
 #include <sys/queue.h>
 #include <unistd.h>
-#include <stdbool.h>
 
 #include "util.h"
 #include "wgotw.h"
 
 __attribute__((constructor (101))) void wgotw_init()
 {
-	session = wgotw_session_init();
+	wgotw_session_init();
 
 	printf("[+] wgotw_init(): %s\n", session->dir);
 }
 
 __attribute__((destructor (101))) void wgotw_deinit()
 {
-	wgotw_session_free(session);
+	wgotw_session_free();
 	printf("[+] wgotw_deinit()\n");
 }
 
@@ -62,7 +61,7 @@ static void connection_free(struct wgotw_connection *con)
 	free(con);
 }
 
-static void ensure_session_connection(int sockfd)
+static struct wgotw_connection *ensure_session_connection(int sockfd)
 {
 	struct sockfacts *facts = sockfacts_init(sockfd);
 
@@ -70,7 +69,8 @@ static void ensure_session_connection(int sockfd)
 	SLIST_FOREACH(con, &(session->addr_head), connections) {
 		printf("ensure_connection: %s:%d\n", con->address, con->port);
 		if (con->port == facts->port && !strcmp(con->address, facts->address)) {
-			return;
+			sockfacts_free(facts);
+			return con;
 		}
 	}
 
@@ -78,9 +78,10 @@ static void ensure_session_connection(int sockfd)
 	SLIST_INSERT_HEAD(&(session->addr_head), con, connections);
 
 	sockfacts_free(facts);
+	return con;
 }
 
-struct wgotw_session *wgotw_session_init()
+void wgotw_session_init()
 {
 	session = malloc(sizeof(struct wgotw_session));
 	session->pid = getpid();
@@ -91,8 +92,6 @@ struct wgotw_session *wgotw_session_init()
 	mkdir(session->dir, 0777);
 
 	SLIST_INIT(&(session->addr_head));
-
-	return session;
 }
 
 void wgotw_session_free()
@@ -109,17 +108,33 @@ void wgotw_session_free()
 	free(session);
 }
 
-void wgotw_record_outgoing(int sockfd, void *buf, size_t len)
+void wgotw_record(int type, int sockfd, const void *buf, size_t len)
 {
-	ensure_session_connection(sockfd);
+	struct wgotw_connection *con = ensure_session_connection(sockfd);
 
-	printf("outgoing: got %zu bytes\n", len);
-}
+	char *fmt;
+	switch (type) {
+		case BUFFER_INBOUND:
+			fmt = "inbound";
+			break;
+		case BUFFER_OUTBOUND:
+			fmt = "outbound";
+			break;
+		default:
+			fmt = "unknown";
+	}
 
-void wgotw_record_incoming(int sockfd, void *buf, size_t len)
-{
-	ensure_session_connection(sockfd);
+	int fnlen = snprintf(NULL, 0, "%s/%s.%ld", con->dir, fmt, con->count) + 1;
+	char *fname = malloc(fnlen);
+	snprintf(fname, fnlen, "%s/%s.%ld", con->dir, fmt, con->count);
 
-	printf("incoming: got %zu bytes\n", len);
+	FILE *dump = fopen(fname, "w");
+
+	fwrite(buf, 1, len, dump);
+
+	fclose(dump);
+	free(fname);
+
+	con->count++;
 }
 

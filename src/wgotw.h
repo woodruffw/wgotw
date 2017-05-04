@@ -8,6 +8,12 @@
 #define WGOTW_CON_INBOUND_FMT WGOTW_CON_TREE_FMT "/inbound"
 #define WGOTW_CON_OUTBOUND_FMT WGOTW_CON_TREE_FMT "/outbound"
 
+enum WGOTW_BUFFER_TYPE {
+	BUFFER_INBOUND,
+	BUFFER_OUTBOUND,
+	BUFFER_UNKNOWN,
+};
+
 struct wgotw_session {
 	int pid;
 	char *dir;
@@ -22,10 +28,9 @@ struct wgotw_connection {
 	SLIST_ENTRY(wgotw_connection) connections;
 };
 
-struct wgotw_session *wgotw_session_init();
+void wgotw_session_init();
 void wgotw_session_free();
-void wgotw_record_outgoing(int sockfd, void *buf, size_t len);
-void wgotw_record_incoming(int sockfd, void *buf, size_t len);
+void wgotw_record(int type, int sockfd, const void *buf, size_t len);
 
 #ifdef WGOTW_MAIN
 struct wgotw_session *session;
