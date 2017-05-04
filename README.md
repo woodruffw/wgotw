@@ -17,3 +17,17 @@ of functions.
 ```bash
 $ make
 ```
+
+### Usage
+
+You can use the included wrapper script:
+
+```
+$ ./wgotw --help
+```
+
+Or just `LD_PRELOAD` the library directly:
+
+```bash
+$ LD_PRELOAD=./libwgotw.so <cmd [args ...]>
+```
