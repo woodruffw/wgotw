@@ -16,6 +16,7 @@ enum WGOTW_BUFFER_TYPE {
 
 struct wgotw_options {
 	int verbose;
+	int debug;
 };
 
 struct wgotw_session {

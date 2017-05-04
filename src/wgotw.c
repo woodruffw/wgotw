@@ -71,7 +71,6 @@ static struct wgotw_connection *ensure_session_connection(int sockfd)
 
 	struct wgotw_connection *con;
 	SLIST_FOREACH(con, &(session->addr_head), connections) {
-		printf("ensure_connection: %s:%d\n", con->address, con->port);
 		if (con->port == facts->port && !strcmp(con->address, facts->address)) {
 			sockfacts_free(facts);
 			return con;
@@ -94,6 +93,7 @@ void wgotw_session_init()
 	snprintf(session->dir, len, WGOTW_SESSION_FMT, session->pid);
 
 	session->opts.verbose = getenv("WGOTW_VERBOSE") ? 1 : 0;
+	session->opts.verbose = getenv("WGOTW_DEBUG") ? 1 : 0;
 
 	SLIST_INIT(&(session->addr_head));
 
