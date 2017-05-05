@@ -34,7 +34,7 @@ $ LD_PRELOAD=./libwgotw.so <cmd [args ...]>
 
 ### Example
 
-```
+```bash
 $ ./wgotw -Dd 'curl example.com'
 [ ... snip ... ]
 
