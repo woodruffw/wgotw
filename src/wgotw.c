@@ -86,6 +86,13 @@ void wgotw_session_init()
 
 	/* actually place the session on disk */
 	mkdir(session->dir, 0777);
+
+	DEBUG("session info:\n"
+		"\tpid: %d\n"
+		"\tdir: %s\n"
+		"\tverbose: %d\n"
+		"\tdebug: %d\n",
+		session->pid, session->dir, session->opts.verbose, session->opts.debug);
 }
 
 void wgotw_session_free()
