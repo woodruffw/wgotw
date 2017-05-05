@@ -35,27 +35,14 @@ static struct wgotw_connection *connection_init(struct sockfacts *facts)
 	con->port = facts->port;
 	con->count = 0;
 
-	/*
-		this is why i don't write C anymore
-	*/
-	int len = snprintf(NULL, 0, WGOTW_SESSION_FMT "/%s", session->pid,
-		con->address) + 1;
-	char *addr_dir = malloc(len);
-	snprintf(addr_dir, len, WGOTW_SESSION_FMT "/%s", session->pid,
-		con->address);
-
-	/* place the addr dir on disk */
+	char *addr_dir;
+	asprintf(&addr_dir, WGOTW_SESSION_FMT "/%s", session->pid, con->address);
 	mkdir(addr_dir, 0777);
 
-	len = snprintf(NULL, 0, "%s/%d", addr_dir, con->port) + 1;
-	con->dir = malloc(len);
-	snprintf(con->dir, len, "%s/%d", addr_dir, con->port);
-
-	/* place the port dir on disk */
+	asprintf(&(con->dir), "%s/%d", addr_dir, con->port);
 	mkdir(con->dir, 0777);
 
 	free(addr_dir);
-
 	return con;
 }
 
@@ -89,9 +76,8 @@ void wgotw_session_init()
 {
 	session = malloc(sizeof(struct wgotw_session));
 	session->pid = getpid();
-	size_t len = snprintf(NULL, 0, WGOTW_SESSION_FMT, session->pid) + 1;
-	session->dir = malloc(len);
-	snprintf(session->dir, len, WGOTW_SESSION_FMT, session->pid);
+
+	asprintf(&(session->dir), WGOTW_SESSION_FMT, session->pid);
 
 	session->opts.verbose = getenv("WGOTW_VERBOSE") ? 1 : 0;
 	session->opts.debug = getenv("WGOTW_DEBUG") ? 1 : 0;
@@ -132,12 +118,10 @@ void wgotw_record(int type, int sockfd, const void *buf, size_t len)
 			fmt = "unknown";
 	}
 
-	int fnlen = snprintf(NULL, 0, "%s/%s.%ld", con->dir, fmt, con->count) + 1;
-	char *fname = malloc(fnlen);
-	snprintf(fname, fnlen, "%s/%s.%ld", con->dir, fmt, con->count);
+	char *fname;
+	asprintf(&fname, "%s/%s.%ld", con->dir, fmt, con->count);
 
 	FILE *dump = fopen(fname, "w");
-
 	fwrite(buf, 1, len, dump);
 
 	fclose(dump);
