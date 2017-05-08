@@ -79,3 +79,7 @@ Content-Length: 1270
 
 [ ... snip ... ]
 ```
+
+### TODO:
+
+* Dump contents of `iovec` in `sendmsg`/`recvmsg`.
