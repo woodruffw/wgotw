@@ -83,3 +83,6 @@ Content-Length: 1270
 ### TODO:
 
 * Dump contents of `iovec` in `sendmsg`/`recvmsg`.
+* Add a reorganization tool to turn `inbound.N`/`outbound.N` into a single file (BSON?).
+* Add a visualization tool showing the flow/size of messages.
+
