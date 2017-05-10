@@ -17,7 +17,8 @@ $(TARGET): $(OBJS)
 
 doc:
 	VERS=$(shell git describe --tags --dirty --always 2>/dev/null \
-			|| git rev-parse --short HEAD) \
+			|| git rev-parse --short HEAD \
+			|| echo "unknown-version") \
 	doxygen Doxyfile
 
 clean:
