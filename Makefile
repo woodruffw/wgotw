@@ -1,4 +1,5 @@
 CC := gcc
+RM := rm -rf
 CFLAGS := -fPIC -Wall -Wextra -Wno-unused-result -O2 -g -D_GNU_SOURCE
 LDFLAGS := -shared -ldl
 
@@ -14,5 +15,11 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^
 
+doc:
+	VERS=$(shell git describe --tags --dirty --always 2>/dev/null \
+			|| git rev-parse --short HEAD) \
+	doxygen Doxyfile
+
 clean:
-	rm -f $(TARGET) $(OBJS)
+	$(RM) $(TARGET) $(OBJS)
+	$(RM) html/ man/
