@@ -10,10 +10,13 @@ OBJS = $(SRCS:.c=.o)
 
 .PHONY: all clean
 
+32: CFLAGS += -m32
+32: all
+
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 doc:
 	VERS=$(shell git describe --tags --dirty --always 2>/dev/null \
