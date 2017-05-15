@@ -1,7 +1,7 @@
 CC := gcc
 RM := rm -rf
 CFLAGS := -fPIC -Wall -Wextra -Wno-unused-result -O2 -g -D_GNU_SOURCE
-LDFLAGS := -shared -ldl
+LDFLAGS := -Wl,--no-as-needed -shared -ldl
 
 TARGET = libwgotw.so
 
