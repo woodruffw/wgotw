@@ -10,10 +10,10 @@ OBJS = $(SRCS:.c=.o)
 
 .PHONY: all clean
 
+all: $(TARGET)
+
 32: CFLAGS += -m32
 32: all
-
-all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
