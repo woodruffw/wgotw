@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require "slop"
 require "shellwords"
 
 opts = Slop.parse suppress_errors: true do |o|
-  o.banner = <<~EOS
+  o.banner = <<~HELP
     Execute a program and collect its socket traffic.
 
     Usage:
@@ -12,7 +13,7 @@ opts = Slop.parse suppress_errors: true do |o|
 
     Example:
       wgotw --verbose "curl http://example.com"
-  EOS
+  HELP
 
   o.on "-h", "--help", "print this help message" do
     puts o
@@ -38,4 +39,4 @@ end
 
 cmdline = Shellwords.split(opts.args.first)
 
-exec *cmdline
+exec(*cmdline)
