@@ -30,8 +30,9 @@ static struct wgotw_connection *connection_init(struct sockfacts *facts)
     struct wgotw_connection *con = malloc(sizeof(struct wgotw_connection));
     int addr_len = strlen(facts->address);
 
-    con->address = malloc(addr_len);
+    con->address = malloc(addr_len + 1);
     memcpy(con->address, facts->address, addr_len);
+    con->address[addr_len] = '\0';
     con->port = facts->port;
     con->count = 0;
 
