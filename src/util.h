@@ -5,15 +5,15 @@
  * @brief Represents some basic "facts" about a socket.
  */
 struct sockfacts {
-	/**
-	 * @brief The destination address (IPv4 or IPv6) associated with the socket.
-	 */
-	char *address;
+    /**
+     * @brief The destination address (IPv4 or IPv6) associated with the socket.
+     */
+    char *address;
 
-	/**
-	 * @brief The port associated with the socket.
-	 */
-	int port;
+    /**
+     * @brief The port associated with the socket.
+     */
+    int port;
 };
 
 /**

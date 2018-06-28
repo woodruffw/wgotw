@@ -26,11 +26,11 @@ extern struct wgotw_session *session;
  *
  */
 #define VERBOSE(fmt, ...) \
-	do { \
-		if (session->opts.verbose) { \
-			fprintf(stderr, "[+] " fmt "\n", __VA_ARGS__); \
-		} \
-	} while(0)
+    do { \
+        if (session->opts.verbose) { \
+            fprintf(stderr, "[+] " fmt "\n", __VA_ARGS__); \
+        } \
+    } while(0)
 
 /**
  * @brief Writes a debug message to stderr.
@@ -38,30 +38,30 @@ extern struct wgotw_session *session;
  * will print out debugging messages. Otherwise, nothing will be printed.
  */
 #define DEBUG(fmt, ...) \
-	do { \
-		if (session->opts.debug) { \
-			fprintf(stderr, "[!] " fmt "\n", __VA_ARGS__); \
-		} \
-	} while(0)
+    do { \
+        if (session->opts.debug) { \
+            fprintf(stderr, "[!] " fmt "\n", __VA_ARGS__); \
+        } \
+    } while(0)
 
 /**
  * Enumerates the buffer types recognized by WGOtW.
  */
 enum WGOTW_BUFFER_TYPE {
-	/**
-	 * Inbound buffers.
-	 */
-	BUFFER_INBOUND,
+    /**
+     * Inbound buffers.
+     */
+    BUFFER_INBOUND,
 
-	/**
-	 * Outbound buffers.
-	 */
-	BUFFER_OUTBOUND,
+    /**
+     * Outbound buffers.
+     */
+    BUFFER_OUTBOUND,
 
-	/**
-	 * Unknown (other) buffers.
-	 */
-	BUFFER_UNKNOWN,
+    /**
+     * Unknown (other) buffers.
+     */
+    BUFFER_UNKNOWN,
 };
 
 /**
@@ -71,19 +71,19 @@ enum WGOTW_BUFFER_TYPE {
  * that WGOtW is hooked into.
  */
 struct wgotw_options {
-	/**
-	 * @brief Whether or not to print verbose messages.
-	 *
-	 * See VERBOSE()
-	 */
-	int verbose;
+    /**
+     * @brief Whether or not to print verbose messages.
+     *
+     * See VERBOSE()
+     */
+    int verbose;
 
-	/**
-	 * @brief Whether or not to print debug messages.
-	 *
-	 * See DEBUG()
-	 */
-	int debug;
+    /**
+     * @brief Whether or not to print debug messages.
+     *
+     * See DEBUG()
+     */
+    int debug;
 };
 
 /**
@@ -92,27 +92,27 @@ struct wgotw_options {
  * runtime options, and a list of all connections seen so far.
  */
 struct wgotw_session {
-	/**
-	 * @brief The PID of the process what WGOtW is hooked into.
-	 */
-	int pid;
+    /**
+     * @brief The PID of the process what WGOtW is hooked into.
+     */
+    int pid;
 
-	/**
-	 * @brief The (relative) name of WGOtW's session directory.
-	 * @details Example: `wgotw-1234`
-	 */
-	char *dir;
+    /**
+     * @brief The (relative) name of WGOtW's session directory.
+     * @details Example: `wgotw-1234`
+     */
+    char *dir;
 
-	/**
-	 * @brief The wgotw_options associated with the session.
-	 */
-	struct wgotw_options opts;
+    /**
+     * @brief The wgotw_options associated with the session.
+     */
+    struct wgotw_options opts;
 
-	/**
-	 * @brief The list of all connections recorded by the session.
-	 * @details Each connection is encapsulated in a wgotw_connection.
-	 */
-	SLIST_HEAD(, wgotw_connection) addr_head;
+    /**
+     * @brief The list of all connections recorded by the session.
+     * @details Each connection is encapsulated in a wgotw_connection.
+     */
+    SLIST_HEAD(, wgotw_connection) addr_head;
 };
 
 /**
@@ -122,33 +122,33 @@ struct wgotw_session {
  * port, and a tail pointer to the rest of the connections in the session.
  */
 struct wgotw_connection {
-	/**
-	 * @brief The (relative) name of the connection's directory.
-	 * @details Example: `wgotw-1234/127.0.0.1/80`
-	 */
-	char *dir;
+    /**
+     * @brief The (relative) name of the connection's directory.
+     * @details Example: `wgotw-1234/127.0.0.1/80`
+     */
+    char *dir;
 
-	/**
-	 * @brief The IPv4 or IPv6 address of the remote host.
-	 */
-	char *address;
+    /**
+     * @brief The IPv4 or IPv6 address of the remote host.
+     */
+    char *address;
 
-	/**
-	 * @brief The connection's port.
-	 */
-	int port;
+    /**
+     * @brief The connection's port.
+     */
+    int port;
 
-	/**
-	 * @brief The number of messages sent and received so far.
-	 * @details This number is used to save buffers as unique files, e.g.
-	 * `inbound.1`, `inbound.2`, `outbound.3`.
-	 */
-	long count;
+    /**
+     * @brief The number of messages sent and received so far.
+     * @details This number is used to save buffers as unique files, e.g.
+     * `inbound.1`, `inbound.2`, `outbound.3`.
+     */
+    long count;
 
-	/**
-	 * @brief The remaining connections in the list.
-	 */
-	SLIST_ENTRY(wgotw_connection) connections;
+    /**
+     * @brief The remaining connections in the list.
+     */
+    SLIST_ENTRY(wgotw_connection) connections;
 };
 
 /**
